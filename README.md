@@ -1,11 +1,21 @@
 <html>
- <head><title>MyFK_Insert</title>
+ <head>
+   <title>MyFK_Insert</title>
  </head>
  
  <body>
  <h1>MyFK_Insert</h1>
+ <h2>Motivation</h2>
+ <p>If you want to insert an object, which usese multiple tables in a MySQL database, you often use many
+    SELECT and INSERT statements. This is not very complicated, but can lead to a bulk of code which all
+    looks similar: SELECT, INSERT, SELECT, SELECT, INSERT, SELCT, INSERT, ... . 
+    Complete OR-Mapping frameworks solve this problem, but are often too complicated or too big for
+    a simple insert into multiple tables.</p>
  
- <p>MyFK_Insert inserts Objects in multiple Tables respecting the integrity given on foreign keys. This works in MySQL as long the user has the right to see the foreign key assigment - which is default.
+ <h2>Description</h2>
+ <p>MyFK_Insert is a PHP class which inserts Objects in multiple Tables into a MySQL-DB
+ respecting the integrity given on foreign keys.
+ This works in MySQL as long the user has the right to see the foreign key assigment - which is default.
 
 FKeynsert stands for "Foreign-Key-Insert". Which means that the foreign keys are automatically found and inserted.</p>
 
