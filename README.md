@@ -1,5 +1,12 @@
-MyFK_Insert
-===========
+<html>
+ <head><title>MyFK_Insert</title>
+ </head>
+ 
+ <body>
+ <h1>MyFK_Insert</h1>
+ 
+ <pre>
+
 
 MyFK_Insert inserts Objects in multiple Tables respecting the integrity given on foreign keys. This works in MySQL as long the user has the right to see the foreign key assigment - which is default.
 
@@ -81,3 +88,7 @@ Now, you insert like this
   $fkIns.register("Place" , "name"    , "Bern"    );
   $fkIns.register("Person", "firstName", "Carl"   );
   $fkIns.fkInsert(); // OK, if and only if "familyName" allows NULL-values.
+  
+  </pre>
+  </body>
+  </html>
