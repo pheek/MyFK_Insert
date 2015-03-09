@@ -48,7 +48,7 @@ ID | name      | fk_Place
 <pre>
 // Example 1
   $fkIns = new FKeynsert(dbconnection); //  or new FKeynsert(db-name [, username, password]]);
-  
+                                        // the Connection can be achieved by "$fkIns.getConnection()"
   $fkIns.register("Place" , "name"    , "Toronto" );
   $fkIns.register("Person", "name"    , "John"    );
   $fkIns.fkInsert(); // nothing will be done, because John is already in Toronto.
@@ -69,7 +69,12 @@ ID | name      | fk_Place
   $fkIns.register("Person", "fk_Place",          3);
   $fkIns.fkInsert(); // Abraham will be inserted as living in "Oslo"
                      // This can be useful, if you show the places as "selction-List" storing the ID.
-
+                     // Works only if 
+                     //    * 3 is an existing ID in Person
+                     //    * Third Parameter is an Int
+                     //    * fk_Place exists as foreign key
+                     // can be userful, if you already know the ID (performance)
+                     // BUT have a look at the discussion about a new method called "fkIns.registerFK(tbl, fk_attr, fk_value)
 </pre>
 
 <pre>
@@ -77,7 +82,7 @@ ID | name      | fk_Place
   $fkIns.reset();
   $fkIns.register("Place" , "name"    , "Zürich"  );
   $fkIns.register("Person", "name"    , "Fred"    );
-  $fkIns.fkInsert(); // Fred will be inserte using fk_Place 2, because "Zürich" is already in the List.
+  $fkIns.fkInsert(); // Fred will be inserted using fk_Place 2, because "Zürich" is already in the List.
 </pre>
 
 <pre>
@@ -111,10 +116,10 @@ ID | name      | fk_Place
   $fkIns.register("Place" , "name"    , "Bern"    );
   $fkIns.register("Person", "firstName", "Carl"   );
   $fkIns.fkInsert(); // OK, if and only if "familyName" allows NULL-values.
-  </pre>
+</pre>
   
   
-  <h2>fkInsert()</h2>
+<h2>fkInsert() Internal Steps:</h2>
   <p><tt>fkInsert()</tt> does the following steps.</p>
   <ul>
    <li>Collect all registered inserts (this is already done calling <tt>register()</tt>).</li>
@@ -131,7 +136,7 @@ AND NOT (`REFERENCED_TABLE_NAME` IS NULL);
 </pre> (where "test" ist the name of the db)
 
    </li>
-   <li>Sort the fk-graph so, that all foreign-keys are ID is former tables. 
+   <li>Sort the fk-graph so, that all foreign-keys are ID in former tables. 
    This is done by numbering all leafs (tables without foreign keys) with 1. 
    From this point, all tables only pointing (via FK) to leafs get ID 2.
    Then all tables only pointig to already numbered tables, get 1 + highest-refered-table-number.</li>
@@ -152,6 +157,7 @@ AND NOT (`REFERENCED_TABLE_NAME` IS NULL);
    <li>The above statements are not very performant.</li>
    <li>The statements should be encapsulated into a transaction (BEGIN TRANSACT, COMMIT); so an error in the keys
        can do a ROLLBACK.</li>
+   <li>Probably a foreign Key insert with a known foreign key ID (for performance) is better done using a separate regirter like  $fkIns.registerFK("Person", "fk_Place",          3); instead of   $fkIns.register("Person", "fk_Place",          3);</li>
    <li>...</li>
   </ul>
   
