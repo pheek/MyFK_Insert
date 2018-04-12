@@ -96,7 +96,7 @@ ID | name      | fk_Place
 // Example 6
   $fkIns.reset();
   $fkIns.register("Person", "name"    , "Harold"  );
-  $fkIns.fkInsert(); // ERROR, due to the fk_Person can not be evaluated!
+  $fkIns.fkInsert(); // ERROR, due to the fk_Place can not be evaluated!
 </pre>
 
 <pre>
@@ -122,7 +122,7 @@ ID | name      | fk_Place
 <h2>fkInsert() Internal Steps:</h2>
   <p><tt>fkInsert()</tt> does the following steps.</p>
   <ul>
-   <li>Collect all registered inserts (this is already done calling <tt>register()</tt>).</li>
+   <li>Collect all registered inserts (all registered inserts after the last<tt>reset()<tt> call. This is done using the  <tt>register()</tt>-Method).</li>
    <li>Collect all relevant tables.</li>
    <li>Collect all foreign-key tables like this:
 <pre>
@@ -145,9 +145,9 @@ AND NOT (`REFERENCED_TABLE_NAME` IS NULL);
    <li>Generate an empty IDMap having the table as Key and the Primary-Key (ID) as value.</li>
    <li>Now do the following steps for each table:
      <ul>
-       <li>Create a select-staement with all given (given throhug register()-Staements and foreign keys out of the ID Table.) attributes.
+       <li>Create a SELECT-statement with all given (given throhug register()-statements and foreign keys out of the ID Table.) attributes.
        If it finds something, the ID (primary key) is inserted into the IDMap.</li>
-       <li>If (the above) Select does not find anything, create an insert statement (if no auto-increment is given, add 1 to the max of the tabels primary key).
+       <li>If (the above) SELECT does not find anything, create an insert statement (if no auto-increment is given, add 1 to the max of the tabels primary key).
        <li>The newly inserted ID (or found via select) is inserted into the IDMap.</li>
      </ul></li>
   </ul>
